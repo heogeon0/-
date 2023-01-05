@@ -1,0 +1,59 @@
+function solution(enroll, referral, seller, amount) {
+    var Sell = {}
+    var Enroll = {}
+    Sell['-'] = []
+    Enroll['-'] = []
+    
+    enroll.forEach(i => {
+        Sell[i] = []
+        Enroll[i] = []
+    })
+    
+    referral.forEach((item, idx) => {
+        Enroll[item].push(enroll[idx])
+    })
+    
+    seller.forEach((item, idx) => {
+        Sell[item].push(100 * amount[idx])
+    })
+    
+
+    const stack = [['-','parent',false]]    
+    
+    while (stack.length) {
+        const [now, pa, flag] = stack.pop()
+        if (flag) {
+            if (now !== '-') {
+                
+                Sell[now] = Sell[now].map(item => {
+                    const give = Math.floor(item * 0.1)
+                    if (give > 0) {
+                        Sell[pa].push(give)
+                        return item - give
+                    }
+                    else {
+                        return item                        
+                    }
+                })
+                
+            }
+        }
+        else {
+            stack.push([now,pa,true])
+            
+            for (let child of Enroll[now]) {
+                stack.push([child, now, false])       
+            }
+            
+        }
+        
+    }
+    var answer = []
+    enroll.forEach(item => {
+        answer.push(Sell[item].reduce((acc,now) => acc+now, 0))
+    })
+    
+    console.log(answer)
+    
+    return answer;
+}
