@@ -46,4 +46,4 @@ const solution = (nowIdx, maxMoney) => {
 v[A] = 1;
 solution(A, 0);
 
-console.log(answer);
+console.log(answer === Infinity ? -1 : answer);
